@@ -10,7 +10,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     //class variables
     protected ArrayList<Doctor> doctors; 
 
-    protected final String doctorFilePath = "./data/DOCTORS.txt";
+    protected final String doctorFilePath = "./DOCTORS.txt";
    
        
     //-------------------------------------------------------------------------------------
@@ -238,8 +238,8 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         Boolean isAdded = false;
 
         try{
-            String sql = "INSERT INTO `consultations`(`patient_id`, `doc_id`, `booked_date`, `start_time`, `end_time`, `cost`, `notes`, `image`, `status`) " +
-                         "VALUES ('" + doc_id + "','" + p_id + "','" + consult.getDate() + "','" + consult.getStartTime() + "','" 
+            String sql = "INSERT INTO `consultation`(`patient_id`, `doctor_id`, `booked_date`, `start_time`, `end_time`, `cost`, `notes`, `image_data`, `status`) " +
+                         "VALUES ('" + p_id + "','" + doc_id + "','" + consult.getDate() + "','" + consult.getStartTime() + "','" 
                         + consult.getEndTime() + "','" + consult.getCost() + "','" + consult.getNotes() + "','" 
                         + consult.getImageDate() + "','" + consult.getStatus() + "')";
 
@@ -263,7 +263,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         Boolean isUpdated = false;
 
         try{
-            String sql = "UPDATE consultations SET status =`C` WHERE booking_id =" + booking_id +"')";
+            String sql = "UPDATE `consultation` SET `status`= 'C' WHERE booking_id = '" + booking_id + "'";
 
             SQLCon sc= new SQLCon();    
             if(sc.UpdateData(sql)) isUpdated=true;  
@@ -271,10 +271,33 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         }catch(Exception e){ 
             System.out.println(e);
         }  
-
         return isUpdated;
     }
 
     
+    //--------------------------------------------------------------------------
+    // Calculate the consultation cost based on history 
+    // For the fisrt consultation -> £15, else -> £25 
+    //--------------------------------------------------------------------------
+    public double CalculateCost(String patientId){
+
+        int cost=15;
+
+        try{
+            String sql = "SELECT * FROM consultation WHERE patient_id = '" + patientId +"'";
+
+            SQLCon sc= new SQLCon();    
+            ResultSet rs = sc.GetData(sql); 
+            
+            if(rs.next())
+                cost = 25;
+        
+        }catch(Exception e){ 
+            System.out.println(e);
+        }  
+
+        return cost;
+
+    }
 
 }

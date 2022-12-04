@@ -100,9 +100,33 @@ public class Console {
                     break;
 
                 case "7":
-                    break;
+                    
+                    String patient_id = "P8782";
+                    String doctor_id = "M11111";
+                    
+                    Consultation consult = new Consultation();
+
+                    consult.setDate("2022-11-17");
+                    consult.setStartTime("09:00");
+                    consult.setEndTime("10:00");
+                    consult.setNotes("be sharp at 9.00am");
+                    consult.setImageData("");
+                    consult.setStatus("A");
+                    consult.setCost(wm.CalculateCost(patient_id));
+                    
+
+                    if(wm.AddConsultation(doctor_id, patient_id, consult))
+                        System.out.println("///////////// Booking added sucessfully /////////////");
+                    
+                        break;
 
                 case "8":
+
+                    System.out.println("Enter Booking_ID: ");
+                    
+                    if(wm.CancelConsultation(new Scanner(System.in).nextInt()))
+                        System.out.println("///////////// Booking is Canceled....!!!! /////////////");
+
                     break;
 
                 case "9":
