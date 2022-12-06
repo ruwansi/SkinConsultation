@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 
 public interface SkinConsultationManager {
 
@@ -6,9 +7,10 @@ public interface SkinConsultationManager {
     public Boolean SaveToFile(String filename);
     public String PrintDoctorsList();
     
-    public Boolean CheckAvailability(String licno, String date, String time);
+    public ResultSet CheckAvailability(String licno, String date);
     public Boolean AddPatient(Patient patient);
     public Boolean AddConsultation(String doc_id, String p_id, Consultation consult);
     public Boolean CancelConsultation(int booking_id);
+    public ResultSet ViewConsultation(String status);
 
 }

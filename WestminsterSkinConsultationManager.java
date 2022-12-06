@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
@@ -171,39 +172,22 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     // Check Doctor's availablity
     // Input parameters - doctor's medical lic no, date and start time
     //--------------------------------------------------------------------------
-    public Boolean CheckAvailability(String licno, String date, String time){
+    public ResultSet CheckAvailability(String lic_no, String date){
 
-        Boolean isExists = false;
+        //Boolean isExists = false;
         String sql = "";
 
-        if(licno.isEmpty() && (time.isEmpty()))
+        if(lic_no.isEmpty())
             sql = "SELECT * FROM `availability` WHERE date='"+ date +"'" ;  
-        else if(date.isEmpty() && (time.isEmpty()) )
-            sql = "SELECT * FROM `availability` WHERE lic_no='" + licno + "'" ; 
-        else if(licno.isEmpty() && date.isEmpty())
-            sql = "SELECT * FROM `availability` WHERE start='"+ time + "'" ;
-        else if(time.isEmpty())
-            sql = "SELECT * FROM `availability` WHERE lic_no='" + licno + "' AND date='"+ date + "'" ; 
         else if(date.isEmpty())
-            sql = "SELECT * FROM `availability` WHERE lic_no='" + licno + "' AND start='"+ time + "'" ;
-        else if(licno.isEmpty())
-            sql = "SELECT * FROM `availability` WHERE date='" + date + "' AND start='"+ time + "'" ;
+            sql = "SELECT * FROM `availability` WHERE lic_no='" + lic_no + "'" ; 
         else
-            sql = "SELECT * FROM `availability` WHERE lic_no='" + licno + "' AND date='"+ date +"' AND start='" + time + "'" ; 
+            sql = "SELECT * FROM `availability` WHERE lic_no='" + lic_no + "' AND date='"+ date + "'" ; 
 
         SQLCon sc= new SQLCon();    
         ResultSet rs =  sc.GetData(sql);    
-        
-        try{
-            while(rs.next()==true){  
-                System.out.println(rs.getString(1)+"  "+rs.getString(2)+"  "+rs.getString(3)+"  "+rs.getString(4));  
-                isExists=true;
-            }
-        }catch(Exception e){ 
-            System.out.println(e);
-        }
-        
-        return isExists;
+
+        return rs;
     }
 
     //--------------------------------------------------------------------------
@@ -231,7 +215,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     }
 
     //--------------------------------------------------------------------------
-    //
+    // Add consultaion (booking details)
     //--------------------------------------------------------------------------
     public Boolean AddConsultation(String doc_id, String p_id, Consultation consult){
 
@@ -274,6 +258,26 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         return isUpdated;
     }
 
+
+    //--------------------------------------------------------------------------
+    // View bookings 
+    // Input param - status: A -> Active  C-> cancelled 
+    //--------------------------------------------------------------------------
+    public ResultSet ViewConsultation(String status){
+
+        ResultSet rs=null;
+
+        try{
+            String sql = "SELECT * FROM `consultation` WHERE status='" + status +"'";  
+        
+            SQLCon sc= new SQLCon();    
+            rs =  sc.GetData(sql);    
+        
+        }catch(Exception e){ 
+            System.out.println(e);
+        }  
+        return rs;
+    }
     
     //--------------------------------------------------------------------------
     // Calculate the consultation cost based on history 
@@ -289,6 +293,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
             SQLCon sc= new SQLCon();    
             ResultSet rs = sc.GetData(sql); 
             
+            //if petient exist 
             if(rs.next())
                 cost = 25;
         
@@ -297,7 +302,34 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         }  
 
         return cost;
+    }
 
+    //--------------------------------------------------------------------------
+    // If doctor is not available, auto assign the next available doctor  
+    // picking the doctor will be done randomly
+    //--------------------------------------------------------------------------
+    public String AutoAssignDoctor(ArrayList<String> rs){
+
+         int i = 0;
+         String row_data = "";
+         int row_count = rs.size();
+
+        //generate a random no in between the size of arraylist
+        Random random = new Random();
+        int size = random.nextInt(row_count);
+
+        //lopp through the row set until it matches the random value
+        for(String row: rs){            
+            if(size==i){
+                row_data = row;
+                break;
+            }else{
+                i = i +1;
+            }    
+        }
+
+        return row_data;        
+        
     }
 
 }

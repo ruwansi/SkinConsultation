@@ -1,25 +1,26 @@
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class Console {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         WestminsterSkinConsultationManager wm = new WestminsterSkinConsultationManager();
        
-        Scanner input = new Scanner(System.in);
-
         while (true) {
         
             //call the main menu 
             DisplayMainMenu(); 
 
-            //get the user option5
-            System.out.println("Enter options 1 to 4: ");
-		    String value = input.next();
+            Scanner value = new Scanner(System.in); 
+            System.out.println("Enter options 1 to 11: ");
             
-            switch (value) {
+            switch (value.nextInt()) {
                 
-				case "1": 
+				case 1: 
                     
                     Doctor doctor = new Doctor();
 
@@ -44,42 +45,25 @@ public class Console {
                     wm.AddDoctor(doctor);
                     System.out.println("///////////// Doctor is sdded sucessfully /////////////");
 
-                    // wm.AddDoctor("Ruwan", "Silva", "1972-05-15", "071 405 2829", "M12345", "Cosmetic dermatology");
-                    // wm.AddDoctor("Sonal", "Maleesha", "2005-04-27", "077 777 8900" , "M11111", "Medical dermatology");
-                    // wm.AddDoctor("Onesha", "Hashini", "2008-12-19", "070 345 1234", "M22222", "Pediatric dermatology");
                     break;
 
-                case "2":
+                case 2:
                     System.out.println("Enter Medical Licence No: ");
                     System.out.println("Doctor " + wm.DeleteDoctor(new Scanner(System.in).nextLine()) );
                     break;
                 
-                case "3":
+                case 3:
                     System.out.println(wm.PrintDoctorsList());
                     break;
 
-                case "4":
+                case 4:
                     if(wm.SaveToFile(wm.doctorFilePath)) 
                         System.out.println("///////////// Saved the file sucessfully /////////////");
                     
                     break;
                 
-                case "5":
-                    System.out.println("Enter Medical Licence No: ");
-                    String lic_no = new Scanner(System.in).nextLine();
-
-                    System.out.println("Enter Date (yyyy-mm-dd): ");
-                    String date = new Scanner(System.in).nextLine();
+                case 5:
                     
-                    System.out.println("Enter Time (hh:mm): ");
-                    String time = new Scanner(System.in).nextLine();
-                    
-                    if(wm.CheckAvailability(lic_no, date, time)==false) 
-                        System.out.println("///////////// No doctor is Available /////////////");
-                    
-                    break;
-
-                case "6":
                     Patient patient = new Patient();
                     
                     System.out.println("Enter First Name: ");
@@ -99,28 +83,72 @@ public class Console {
                     
                     break;
 
-                case "7":
+                case 6:
                     
-                    String patient_id = "P8782";
-                    String doctor_id = "M11111";
-                    
-                    Consultation consult = new Consultation();
+                    //String patient_id = "P8782";
+                    String doctor_id = "";
 
-                    consult.setDate("2022-11-17");
-                    consult.setStartTime("09:00");
-                    consult.setEndTime("10:00");
-                    consult.setNotes("be sharp at 9.00am");
-                    consult.setImageData("");
-                    consult.setStatus("A");
-                    consult.setCost(wm.CalculateCost(patient_id));
-                    
+                    System.out.println("Enter Patient Id (P8782): ");
+                    String patient_id = new Scanner(System.in).next();
 
-                    if(wm.AddConsultation(doctor_id, patient_id, consult))
-                        System.out.println("///////////// Booking added sucessfully /////////////");
-                    
-                        break;
+                    System.out.println("Enter Doctor's Medical Licence No: ");
+                    String lic_no = new Scanner(System.in).nextLine();
 
-                case "8":
+                    System.out.println("Enter Date (yyyy-mm-dd): ");
+                    String date = new Scanner(System.in).nextLine();
+                    
+                    //check the availability
+                    ResultSet availability = wm.CheckAvailability(lic_no, date);
+                    
+                    ArrayList<String> availability_list = new ArrayList<String>();
+                    
+                    while(availability.next()){  
+                         
+                        String row = availability.getString(1)+ "\t" +availability.getString(2)+ "\t" +
+                                     availability.getString(3)+ "\t" +availability.getString(4) + "\t" +availability.getString(5);
+                        
+                        //create a list
+                        availability_list.add(row);
+                        System.out.println(row);  
+                    }
+                    
+                    System.out.println("\nDo you want to proceed (Y/N)? : ");
+                    String reply = new Scanner(System.in).nextLine().trim().toUpperCase();
+                    
+                    if(reply.compareTo("Y")==0){
+                           
+                        //get doctor assigned 
+                        String assigned_doctor = wm.AutoAssignDoctor(availability_list);
+                        
+                        Scanner s = new Scanner(assigned_doctor);
+                        s.useDelimiter("[\t]");
+
+                        Consultation consult = new Consultation();
+
+                        //set parameters to add
+                        while(s.hasNext()){
+                            s.next();
+                            doctor_id = s.next();
+                            consult.setDate(s.next());
+                            consult.setStartTime(s.next());
+                            consult.setEndTime(s.next());
+                            consult.setNotes("no cash refundable if you are late");
+                            consult.setImageData("");
+                            consult.setStatus("A");
+                            consult.setCost(wm.CalculateCost(patient_id));
+                        }
+
+                        //add to the consultation table
+                        if(wm.AddConsultation(doctor_id, patient_id, consult))
+                            System.out.println("///////////// Booking added sucessfully /////////////");
+                            System.out.println("\nAssigned_doctor: " + doctor_id);
+                        
+                            s.close();
+                    }
+ 
+                    break;
+                
+                case 7:
 
                     System.out.println("Enter Booking_ID: ");
                     
@@ -129,11 +157,25 @@ public class Console {
 
                     break;
 
-                case "9":
+                case 8:
+                    
+                    //Print reults
+                    ResultSet bookings = wm.ViewConsultation("A");
+                    
+                    while(bookings.next()==true){  
+                        System.out.println(bookings.getString(1)+ "\t" + bookings.getString(2)+ "\t" +bookings.getString(3) + "\t" + 
+                                           bookings.getString(4)+ "\t" + bookings.getString(5)+ "\t" +bookings.getString(6) + "\t" + 
+                                           bookings.getString(7)+ "\t" + bookings.getString(8)+ "\t" +bookings.getString(9) + "\t" +
+                                           bookings.getString(10));  
+                    }
+                    
+                    break;
+                
+                case 9:
                     new GUI();
                     break;    
                 
-                case "10":
+                case 10:
                     System.exit(0);    
                 
                 default:
@@ -141,9 +183,7 @@ public class Console {
                     break;
             }          
 
-            //input.close();
         }
-        
              
     }
 
@@ -160,10 +200,10 @@ public class Console {
         System.out.println("3. Print the list of the doctors");
         System.out.println("4. Save in a file");
         System.out.println("---------------------------------");
-		System.out.println("5. Check Doctor Availability");
-        System.out.println("6. Add a patient");
-        System.out.println("7. Add Consultation");
-        System.out.println("8. Cancel Consultation");       
+	    System.out.println("5. Add a patient");
+        System.out.println("6. Add Consultation");
+        System.out.println("7. Cancel Consultation");
+        System.out.println("8. View Consultation");       
         System.out.println("9. GUI");
         System.out.println("10. Exit");
         
