@@ -314,7 +314,12 @@ public class AddConsultaion extends JFrame implements ActionListener {
     void SelectUploadImage(){
         
         JFileChooser fc = new JFileChooser();
-        fc.showOpenDialog(null);
+        int result = fc.showOpenDialog(null);
+
+        // Make sure that a file was chosen, else exit
+        if (result != JFileChooser.APPROVE_OPTION) {
+            return;            
+        }
 
         // Get file path
         image_path = fc.getSelectedFile().getAbsolutePath();
@@ -326,7 +331,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
     // upload file to a destination folder
     // --------------------------------------------------------------------------
     void UploadImage(){
-
+        
         try {
              // Copy file from source to destination
              FileChannel source = new FileInputStream(image_path).getChannel();
