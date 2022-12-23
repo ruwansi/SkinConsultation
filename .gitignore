@@ -1,5 +1,7 @@
 .vscode
 *.class
+*.txt
 setup
 lib
-
+images
+ui-build.bat

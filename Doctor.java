@@ -1,4 +1,3 @@
-
 public class Doctor extends Person{
     
     private String medical_licence_number;
@@ -20,6 +19,6 @@ public class Doctor extends Person{
     
     public String getspecialization(){
         return this.specialization;        
-    }
+    }   
 
 }

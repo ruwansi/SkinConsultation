@@ -11,8 +11,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     //class variables
     protected ArrayList<Doctor> doctors; 
 
-    protected final String doctorFilePath = "./DOCTORS.txt";
-   
+    protected final String doctorFilePath = "./DOCTORS.txt";   
        
     //-------------------------------------------------------------------------------------
     //constructor
@@ -174,15 +173,16 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     //--------------------------------------------------------------------------
     public ResultSet CheckAvailability(String lic_no, String date){
 
-        //Boolean isExists = false;
         String sql = "";
 
-        if(lic_no.isEmpty())
-            sql = "SELECT * FROM `availability` WHERE date='"+ date +"'" ;  
-        else if(date.isEmpty())
+        if((lic_no.isEmpty())&&(!date.isEmpty()))
+            sql = "SELECT * FROM `availability` WHERE date='" + date + "'" ;  
+        else if((date.isEmpty())&&(!lic_no.isEmpty()))
             sql = "SELECT * FROM `availability` WHERE lic_no='" + lic_no + "'" ; 
+        else if((lic_no.isEmpty()) && (date.isEmpty()))
+            sql = "SELECT * FROM `availability`";
         else
-            sql = "SELECT * FROM `availability` WHERE lic_no='" + lic_no + "' AND date='"+ date + "'" ; 
+            sql = "SELECT * FROM `availability` WHERE lic_no='" + lic_no + "' AND date='" + date + "'" ; 
 
         SQLCon sc= new SQLCon();    
         ResultSet rs =  sc.GetData(sql);    
@@ -318,7 +318,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         Random random = new Random();
         int size = random.nextInt(row_count);
 
-        //lopp through the row set until it matches the random value
+        //loop through the row set until it matches the random value
         for(String row: rs){            
             if(size==i){
                 row_data = row;
@@ -327,9 +327,27 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
                 i = i +1;
             }    
         }
-
+        
         return row_data;        
         
+    }
+
+    // --------------------------------------------------------------------------
+    // Get Patient information from theh database
+    // --------------------------------------------------------------------------
+    public ResultSet GetPatientData() {
+
+        ResultSet rs = null;
+        String sql = "SELECT * FROM `patients`";
+
+        try {
+            SQLCon sc = new SQLCon();
+            rs = sc.GetData(sql);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return rs;
     }
 
 }

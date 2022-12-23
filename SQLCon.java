@@ -43,15 +43,16 @@ public class SQLCon {
     public Boolean UpdateData(String sqlquery){
 
         Boolean isUpdated = false;
+        int ret=0;
 
         try{
-            statement.executeUpdate(sqlquery);  
-            connection.close();
-            isUpdated = true;
+            ret = statement.executeUpdate(sqlquery);  
+            connection.close();           
         
         }catch(Exception e){ 
             System.out.println(e);
         }
+        if (ret == 1) isUpdated = true;
         
         return isUpdated;
           

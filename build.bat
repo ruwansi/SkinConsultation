@@ -5,7 +5,13 @@ javac Consultation.java
 javac SkinConsultationManager.java
 javac WestminsterSkinConsultationManager.java
 javac SQLCon.java
-javac GUI.java
+javac Encrypt.java
 javac Console.java
+javac GUI.java
+javac AddConsultaion.java
+javac AddPatient.java
+javac CancelConsultation.java
+
+
 
 java Console
