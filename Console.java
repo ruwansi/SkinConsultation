@@ -13,12 +13,11 @@ public class Console {
             DisplayMainMenu(); 
 
             Scanner value = new Scanner(System.in); 
-            System.out.println("Enter options 1 to 7: ");
+            System.out.println("Enter options 1 to 6: ");
             
             switch (value.nextInt()) {
                 
 				case 1: 
-                    
                     Doctor doctor = new Doctor();
 
                     System.out.println("Enter First Name: ");
@@ -41,7 +40,6 @@ public class Console {
 
                     wm.AddDoctor(doctor);
                     System.out.println("///////////// Doctor is sdded sucessfully /////////////");
-
                     break;
 
                 case 2:
@@ -54,25 +52,14 @@ public class Console {
                     break;
 
                 case 4:
-                    if(wm.SaveToFile(wm.doctorFilePath)) 
-                        System.out.println("///////////// Saved to the file sucessfully /////////////");
-                    
+                    if(wm.SaveToFile(wm.doctorFilePath)) System.out.println("///////////// Saved to the file sucessfully /////////////");
                     break;
-                
+               
                 case 5:
-
-                    System.out.println("Enter Booking_ID: ");
-                    
-                    if(wm.CancelConsultation(new Scanner(System.in).nextInt()))
-                        System.out.println("///////////// Booking is Canceled....!!!! /////////////");
-
-                    break;
- 
-                case 6:
                     new GUI();
                     break;    
                 
-                case 7:
+                case 6:
                     System.exit(0);   
                     
                 default:
@@ -96,9 +83,8 @@ public class Console {
         System.out.println("2. Delete a doctor");
         System.out.println("3. Print the list of the doctors");
         System.out.println("4. Save in a file");
-        System.out.println("5. Cancel Consultation");
-        System.out.println("6. GUI");
-        System.out.println("7. Exit");
+        System.out.println("5. GUI");
+        System.out.println("6. Exit");
       
         System.out.println("\n");
 	}

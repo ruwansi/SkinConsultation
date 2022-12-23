@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 public class GUI extends JFrame implements ActionListener{
     
     final JButton btn_addConsultation,btn_addPatient, btn_cancelConsultation, btn_exit;  
-    final JPanel panelLeft, panelRight; //, panelCenter;
+    final JPanel panelLeft, panelRight, panelCenter;
     JTable tbl_doctor, tbl_bookings, tbl_patients;
 
     WestminsterSkinConsultationManager wm = new WestminsterSkinConsultationManager();
@@ -28,11 +28,11 @@ public class GUI extends JFrame implements ActionListener{
 
         //Panels
         panelLeft = new JPanel();
-        panelLeft.setPreferredSize(new Dimension(780, 980));
+        panelLeft.setPreferredSize(new Dimension(550, 980));
         panelLeft.setBackground(Color.LIGHT_GRAY);
 
         panelRight = new JPanel();
-        panelRight.setPreferredSize(new Dimension(1200, 980));
+        panelRight.setPreferredSize(new Dimension(550, 980));
         panelRight.setBackground(Color.LIGHT_GRAY);
         
         JPanel panelTop = new JPanel();
@@ -45,29 +45,29 @@ public class GUI extends JFrame implements ActionListener{
         panelBottom.setLayout(null);
         panelBottom.setBackground(Color.GRAY);
 
-        // panelCenter = new JPanel();
-        // panelCenter.setPreferredSize(new Dimension(600, 980));
-        // panelCenter.setBackground(Color.WHITE);
+        panelCenter = new JPanel();
+        panelCenter.setPreferredSize(new Dimension(800, 980));
+        panelCenter.setBackground(Color.WHITE);
 
         //components
-        JLabel lbl_mainheading = new JLabel(" - Westminster Skin Consultation Manager - ");
+        JLabel lbl_mainheading = new JLabel("Westminster Skin Consultation Manager");
         lbl_mainheading.setBounds(565, 30, 1000, 80);
         lbl_mainheading.setFont(new Font("Verdana", Font.BOLD, 32));
 
         btn_addPatient = new JButton("Add Patient");
-        btn_addPatient.setBounds(460, 50, 200, 40);
+        btn_addPatient.setBounds(510, 50, 200, 40);
         btn_addPatient.addActionListener(this);
 
         btn_addConsultation = new JButton("Add Consultation");
-        btn_addConsultation.setBounds(690, 50, 200, 40);
+        btn_addConsultation.setBounds(740, 50, 200, 40);
         btn_addConsultation.addActionListener(this);
 
         btn_cancelConsultation = new JButton("Cancel a Consultation");
-        btn_cancelConsultation.setBounds(910, 50, 200, 40);
+        btn_cancelConsultation.setBounds(960, 50, 200, 40);
         btn_cancelConsultation.addActionListener(this);
 
         btn_exit = new JButton("Exit");
-        btn_exit.setBounds(1130, 50, 200, 40);
+        btn_exit.setBounds(1180, 50, 200, 40);
         btn_exit.addActionListener(this);
 
         JLabel lbl_doctor = new JLabel("Doctor Details");
@@ -80,10 +80,9 @@ public class GUI extends JFrame implements ActionListener{
         panelBottom.add(btn_addConsultation);
         panelBottom.add(btn_cancelConsultation);
         panelBottom.add(btn_exit);        
-        //panelLeft.add(lbl_doctor);
         panelLeft.add(new JScrollPane(tbl_doctor));
         panelRight.add(new JScrollPane(tbl_bookings));
-        panelRight.add(new JScrollPane(tbl_patients));
+        panelCenter.add(new JScrollPane(tbl_patients));
         
         //add panels to the frame 
         this.setTitle("Main Dashboard");
@@ -93,7 +92,7 @@ public class GUI extends JFrame implements ActionListener{
         this.add(panelRight, BorderLayout.EAST);
         this.add(panelTop, BorderLayout.NORTH);
         this.add(panelBottom, BorderLayout.SOUTH);
-        //this.add(panelCenter, BorderLayout.CENTER);
+        this.add(panelCenter, BorderLayout.CENTER);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
     
