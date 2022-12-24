@@ -7,10 +7,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 public class GUI extends JFrame implements ActionListener{
     
@@ -117,14 +115,14 @@ public class GUI extends JFrame implements ActionListener{
                 if(!image_path.isEmpty()){
 
                     Encrypt en = new Encrypt();
-                    en.decryptImage(image_path);
+                    en.EncryptDecryptImage(image_path);
                     
                     JFrame imageFrame = new JFrame();
                     imageFrame.add(new JLabel(new ImageIcon(image_path)));
                     imageFrame.setBounds(600, 200, 800, 800);
                     imageFrame.pack();
                     imageFrame.setVisible(true);   
-                    en.encryptImage(image_path);                 
+                    en.EncryptDecryptImage(image_path);                
                 }    
             }           
         });

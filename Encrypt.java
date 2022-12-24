@@ -1,6 +1,5 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class Encrypt {
 
@@ -40,9 +39,9 @@ public class Encrypt {
     }
 
     //---------------------------------------------------------
-    // Image encyyption
+    // Image Encryption and Decryption
     //---------------------------------------------------------
-    public void encryptImage(String path) {
+    public void EncryptDecryptImage(String path) {
 
         int i = 0;
         
@@ -70,45 +69,7 @@ public class Encrypt {
 
         } catch (Exception e) {
             System.out.println(e);
-        }
-         
-    }
-
-
-    //---------------------------------------------------------
-    // Image decyyption
-    //---------------------------------------------------------
-    public void decryptImage(String path) {
-
-        int i = 0;
-        
-        try {
-            FileInputStream fis = new FileInputStream(path);
-                            
-            //Convert into byte array
-            byte data[] = new byte[fis.available()];
-                            
-            fis.read(data);
-            for (byte b : data) {
-                data[i] = (byte)(b ^ key);
-                i++;
-            }
-                                
-            // Opening a file for writing purpose
-            FileOutputStream fos = new FileOutputStream(path);
-                                
-            // Writing new byte array value to image which
-            fos.write(data);
-                            
-            // Closing file
-            fos.close();
-            fis.close();        
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        
-        
+        }         
     }
 
 }

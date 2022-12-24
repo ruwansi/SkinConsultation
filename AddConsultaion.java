@@ -25,7 +25,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
     final DefaultTableModel model;
     JLabel lbl_imagepath;
 
-    private String image_path, image_destination;   
+    private String image_path, image_destination="";   
     private String selected_doc_id="";
     
     WestminsterSkinConsultationManager wm = new WestminsterSkinConsultationManager();
@@ -54,6 +54,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
 
         cmb_doctor = new JComboBox<String>();
         cmb_doctor.setBounds(50, 110, 200, 30);
+        cmb_doctor.addActionListener(this);
 
         //Date
         JLabel lbl_date = new JLabel("Date (YYYY-MM-DD)");
@@ -160,16 +161,8 @@ public class AddConsultaion extends JFrame implements ActionListener {
         this.setVisible(true); 
 
         //load initial data
-        Load_Data();
-        
+        Load_Data();        
 
-        // ---------------------------------------------------------------------------------------------
-        // populate Doctors Availability table upon doctor selection
-        // ---------------------------------------------------------------------------------------------
-        cmb_doctor.addActionListener(e -> {            
-            String doc_name = cmb_doctor.getSelectedItem().toString();
-            GetDoctorAvailability(doc_name);
-        });
     }
 
 
@@ -179,6 +172,11 @@ public class AddConsultaion extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         
+        if(e.getSource() == cmb_doctor){
+            String doc_name = cmb_doctor.getSelectedItem().toString();
+            GetDoctorAvailability(doc_name);
+        }
+
         //Search(Go) button on-click
         if(e.getSource() == btn_search){
             GetDoctorAvailability(cmb_doctor.getSelectedItem().toString());
@@ -202,8 +200,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
         }
 
         //Save button on-click event - save the data
-        if(e.getSource() == btn_save){
-            
+        if(e.getSource() == btn_save){            
             if (Validation() == true){
                 SaveConsultation();
             }
@@ -332,7 +329,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
              dest.transferFrom(source, 0, source.size());
              
              Encrypt en = new Encrypt();
-             en.encryptImage(image_destination);
+             en.EncryptDecryptImage(image_destination);
 
              source.close();
              dest.close();
@@ -394,9 +391,11 @@ public class AddConsultaion extends JFrame implements ActionListener {
         
             wm.AddConsultation(selected_doc_id , patient_id ,consult);
             
-            //upload the image to the destination
-            UploadImage();
-
+            if(!image_destination.isEmpty()){
+                //upload the image to the destination
+                UploadImage();
+            }
+            
             JOptionPane.showMessageDialog(null, "Booking is added sucessfully.",
                                         "Add Consultation", JOptionPane.INFORMATION_MESSAGE);
             
