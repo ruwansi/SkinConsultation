@@ -1,10 +1,16 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Encrypt {
 
-    // Encrypting a message
-    public String encryptData(String str) {
+    private static int key = 6;
+  
+    //---------------------------------------------------------
+    // Encrypting a text message
+    //---------------------------------------------------------
+     public String encryptData(String str) {
 
-        int key = 6;
         String x = "";
 
         char[] chars = str.toCharArray();
@@ -17,12 +23,12 @@ public class Encrypt {
         return x;
     }
 
-    // Decrypting a message
+    //---------------------------------------------------------
+    // Decrypting a text message
+    //---------------------------------------------------------
     public String decryptData(String str) {
 
-        int key = 6;
         String x = "";
-
         char[] chars = str.toCharArray();
 
         for (char c : chars) {
@@ -33,16 +39,76 @@ public class Encrypt {
         return x;
     }
 
-    // public static void main(String[] args) {
+    //---------------------------------------------------------
+    // Image encyyption
+    //---------------------------------------------------------
+    public void encryptImage(String path) {
 
-    // String text = "Hi, how are you?";
-    // String encrypted_string = "";
+        int i = 0;
+        
+        try {
+            FileInputStream fis = new FileInputStream(path);
+                            
+            //Convert into byte array
+            byte data[] = new byte[fis.available()];
+                                
+            fis.read(data);
+            for (byte b : data) {
+                data[i] = (byte)(b ^ key);
+                i++;
+            }
+                                
+            // Opening a file for writing purpose
+            FileOutputStream fos = new FileOutputStream(path);
+                                
+            // Writing new byte array value to image which
+            fos.write(data);
+                                
+            // Closing file
+            fos.close();
+            fis.close();   
 
-    // Encrypt en = new Encrypt();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+         
+    }
 
-    // encrypted_string = en.encryptData(text);
-    // System.out.println(encrypted_string);
 
-    // System.out.println(en.decryptData(encrypted_string));
-    // }
+    //---------------------------------------------------------
+    // Image decyyption
+    //---------------------------------------------------------
+    public void decryptImage(String path) {
+
+        int i = 0;
+        
+        try {
+            FileInputStream fis = new FileInputStream(path);
+                            
+            //Convert into byte array
+            byte data[] = new byte[fis.available()];
+                            
+            fis.read(data);
+            for (byte b : data) {
+                data[i] = (byte)(b ^ key);
+                i++;
+            }
+                                
+            // Opening a file for writing purpose
+            FileOutputStream fos = new FileOutputStream(path);
+                                
+            // Writing new byte array value to image which
+            fos.write(data);
+                            
+            // Closing file
+            fos.close();
+            fis.close();        
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+    }
+
 }

@@ -23,7 +23,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
     final JTextField txt_date;
     final JTextArea txt_notes;
     final DefaultTableModel model;
-    JLabel lbl_showimagepath;
+    JLabel lbl_imagepath;
 
     private String image_path, image_destination;   
     private String selected_doc_id="";
@@ -32,8 +32,6 @@ public class AddConsultaion extends JFrame implements ActionListener {
         
     public AddConsultaion(){
 
-        new JFrame();
-        
         JPanel panelleft = new JPanel();
         panelleft.setPreferredSize(new Dimension(600, 300));
         panelleft.setLayout(null);
@@ -72,64 +70,65 @@ public class AddConsultaion extends JFrame implements ActionListener {
         
         // //availability table
         JTable tbl_doctor = new JTable();
-        model = new DefaultTableModel();
-        
+        model = new DefaultTableModel();        
         model.setColumnIdentifiers(new Object[] { "Medical Licence No", "Available Date", "Time" });
-        tbl_doctor.setBounds(50, 170, 500, 350);
+        tbl_doctor.setBounds(50, 170, 500, 250);
         tbl_doctor.setModel(model);
         
         //Patient's drop down
         JLabel lbl_fname = new JLabel("Patient ID/Name *");
-        lbl_fname.setBounds(50, 50, 150, 30);
+        lbl_fname.setBounds(200, 50, 150, 30);
         lbl_fname.setFont(new Font("Calibri", Font.PLAIN, 16));
        
         cmb_patinet_name = new JComboBox<String>();
-        cmb_patinet_name.setBounds(200, 50, 200, 30);
+        cmb_patinet_name.setBounds(350, 50, 200, 30);
        
         //Date-Time Label
         JLabel lbl_datetime = new JLabel("Date/Time *");
-        lbl_datetime.setBounds(50, 100, 200, 30);
+        lbl_datetime.setBounds(200, 100, 150, 30);
         lbl_datetime.setFont(new Font("Calibri", Font.PLAIN, 16));
        
         cmb_datetime = new JComboBox<String>();
-        cmb_datetime.setBounds(200, 100, 200, 30);
+        cmb_datetime.setBounds(350, 100, 200, 30);
 
         //Notes
         JLabel lbl_notes = new JLabel("Special Notes");
-        lbl_notes.setBounds(50, 150, 200, 30);
+        lbl_notes.setBounds(200, 150, 200, 30);
         lbl_notes.setFont(new Font("Calibri", Font.PLAIN, 16));
        
         txt_notes = new JTextArea();
-        txt_notes.setBounds(200, 150, 500, 100);
+        txt_notes.setBounds(350, 150, 350, 100);
+        txt_notes.setLineWrap(true);
 
         //upload image
         JLabel lbl_image = new JLabel("Upload an Image");
-        lbl_image.setBounds(50, 290, 200, 30);
+        lbl_image.setBounds(200, 290, 200, 30);
         lbl_image.setFont(new Font("Calibri", Font.PLAIN, 16));
        
         btn_upload = new JButton("Upload");
-        btn_upload.setBounds(200, 290, 100, 30);
+        btn_upload.setBounds(350, 290, 100, 30);
         btn_upload.addActionListener(this);
 
-        lbl_showimagepath = new JLabel("");
-        lbl_showimagepath.setBounds(310, 290, 400, 30);
+        lbl_imagepath = new JLabel("");
+        lbl_imagepath.setBounds(350, 330, 500, 30);
+        lbl_imagepath.setFont(new Font("Calibri", Font.BOLD, 12));
         
 
         //Save button ----------------------------------------------------
         btn_save = new JButton("Save");
-        btn_save.setBounds(360, 360, 100, 30);
+        btn_save.setBounds(360, 380, 100, 30);
         btn_save.addActionListener(this);
         
         //Reset button ----------------------------------------------------
         btn_reset = new JButton("Reset");
-        btn_reset.setBounds(480, 360, 100, 30);
+        btn_reset.setBounds(480, 380, 100, 30);
         btn_reset.addActionListener(this);
 
         //Cancel button ----------------------------------------------------
         btn_cancel = new JButton("Exit");
-        btn_cancel.setBounds(600, 360, 100, 30);
+        btn_cancel.setBounds(600, 380, 100, 30);
         btn_cancel.addActionListener(this);
-             
+     
         //Add components to the panels
         panelleft.add(lbl_head);
         panelleft.add(cmb_doctor);
@@ -138,8 +137,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
         panelleft.add(txt_date);
         panelleft.add(btn_search);
         panelleft.add(tbl_doctor);
-        //panelleft.add(new JScrollPane(tbl_doctor));
-
+        
         panelRight.add(lbl_fname);
         panelRight.add(cmb_patinet_name);
         panelRight.add(lbl_datetime);
@@ -151,11 +149,11 @@ public class AddConsultaion extends JFrame implements ActionListener {
         panelRight.add(btn_reset);
         panelRight.add(lbl_image);
         panelRight.add(btn_upload);
-        panelRight.add(lbl_showimagepath);
+        panelRight.add(lbl_imagepath);
                 
         //Add panels to the frame
         this.setTitle("Add Consultation");
-        this.setBounds(300,200,1350, 600);
+        this.setBounds(300,200,1200, 520);
         this.add(panelleft, BorderLayout.WEST);
         this.add(panelRight,BorderLayout.EAST);
         this.setResizable(false);      
@@ -168,11 +166,9 @@ public class AddConsultaion extends JFrame implements ActionListener {
         // ---------------------------------------------------------------------------------------------
         // populate Doctors Availability table upon doctor selection
         // ---------------------------------------------------------------------------------------------
-        cmb_doctor.addActionListener(e -> {
-            
+        cmb_doctor.addActionListener(e -> {            
             String doc_name = cmb_doctor.getSelectedItem().toString();
             GetDoctorAvailability(doc_name);
-
         });
     }
 
@@ -212,7 +208,6 @@ public class AddConsultaion extends JFrame implements ActionListener {
                 SaveConsultation();
             }
         }
-
     }
 
     //-------------------------------------------------------------------------------------------------
@@ -230,7 +225,6 @@ public class AddConsultaion extends JFrame implements ActionListener {
         //Load Patient combo box
         try {
             ResultSet dt_rows = wm.GetPatientData();
-
             while (dt_rows.next()) {
                 cmb_patinet_name.addItem(dt_rows.getString(5) + " - " + dt_rows.getString(1) + " " + dt_rows.getString(2));
             }
@@ -239,8 +233,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
         }
 
         //set default position to non-selected
-        cmb_patinet_name.setSelectedIndex(-1);                        
-
+        cmb_patinet_name.setSelectedIndex(-1);
     }
 
     //-------------------------------------------------------------------------------------------------
@@ -324,7 +317,7 @@ public class AddConsultaion extends JFrame implements ActionListener {
         // Get file path
         image_path = fc.getSelectedFile().getAbsolutePath();
         image_destination = "./images/" + fc.getSelectedFile().getName();
-        lbl_showimagepath.setText(image_path);
+        lbl_imagepath.setText(image_path);
     }
 
     // --------------------------------------------------------------------------
@@ -337,7 +330,10 @@ public class AddConsultaion extends JFrame implements ActionListener {
              FileChannel source = new FileInputStream(image_path).getChannel();
              FileChannel dest = new FileOutputStream(image_destination).getChannel();
              dest.transferFrom(source, 0, source.size());
- 
+             
+             Encrypt en = new Encrypt();
+             en.encryptImage(image_destination);
+
              source.close();
              dest.close();
 
@@ -387,12 +383,11 @@ public class AddConsultaion extends JFrame implements ActionListener {
         //Save to the DB                                
         try {
             Consultation consult = new Consultation();
-            Encrypt en = new Encrypt();
-                            
+           
             consult.setDate(date);
             consult.setStartTime(time);
             consult.setEndTime("00:00");
-            consult.setNotes(en.encryptData(txt_notes.getText()));
+            consult.setNotes(new Encrypt().encryptData(txt_notes.getText()));
             consult.setImageData(image_destination);
             consult.setStatus("A");
             consult.setCost(wm.CalculateCost(patient_id));
@@ -402,17 +397,14 @@ public class AddConsultaion extends JFrame implements ActionListener {
             //upload the image to the destination
             UploadImage();
 
-            JOptionPane.showMessageDialog(null, "Booking added sucessfully.",
+            JOptionPane.showMessageDialog(null, "Booking is added sucessfully.",
                                         "Add Consultation", JOptionPane.INFORMATION_MESSAGE);
             
-                                    this.dispose(); 
+            this.dispose(); 
                                                 
         } catch (Exception e) {
             System.out.println(e);
         }
-
-       
-
     }
 
 

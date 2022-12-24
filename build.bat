@@ -12,6 +12,4 @@ javac AddConsultaion.java
 javac AddPatient.java
 javac CancelConsultation.java
 
-
-
 java Console

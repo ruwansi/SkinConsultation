@@ -8,23 +8,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+
 public class GUI extends JFrame implements ActionListener{
     
     final JButton btn_addConsultation,btn_addPatient, btn_cancelConsultation, btn_exit;  
     final JPanel panelLeft, panelRight, panelCenter;
     JTable tbl_doctor, tbl_bookings, tbl_patients;
-
-    WestminsterSkinConsultationManager wm = new WestminsterSkinConsultationManager();
+    private String image_path;
     
-    //Constructor
+    WestminsterSkinConsultationManager wm = new WestminsterSkinConsultationManager();
+   
     public GUI() {
         
         //load existing data
         ViewDoctorDetails();
         ViewBookings();
         ViewPatients();
-
-        new JFrame();        
 
         //Panels
         panelLeft = new JPanel();
@@ -55,19 +57,19 @@ public class GUI extends JFrame implements ActionListener{
         lbl_mainheading.setFont(new Font("Verdana", Font.BOLD, 32));
 
         btn_addPatient = new JButton("Add Patient");
-        btn_addPatient.setBounds(510, 50, 200, 40);
+        btn_addPatient.setBounds(520, 50, 200, 40);
         btn_addPatient.addActionListener(this);
 
         btn_addConsultation = new JButton("Add Consultation");
-        btn_addConsultation.setBounds(740, 50, 200, 40);
+        btn_addConsultation.setBounds(750, 50, 200, 40);
         btn_addConsultation.addActionListener(this);
 
         btn_cancelConsultation = new JButton("Cancel a Consultation");
-        btn_cancelConsultation.setBounds(960, 50, 200, 40);
+        btn_cancelConsultation.setBounds(980, 50, 200, 40);
         btn_cancelConsultation.addActionListener(this);
 
         btn_exit = new JButton("Exit");
-        btn_exit.setBounds(1180, 50, 200, 40);
+        btn_exit.setBounds(1210, 50, 200, 40);
         btn_exit.addActionListener(this);
 
         JLabel lbl_doctor = new JLabel("Doctor Details");
@@ -95,6 +97,37 @@ public class GUI extends JFrame implements ActionListener{
         this.add(panelCenter, BorderLayout.CENTER);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
+
+        //capture the tbl_bookings mouse click event 
+        //to retrive the image path for image loading 
+        tbl_bookings.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+           
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                image_path = tbl_bookings.getValueAt(tbl_bookings.getSelectedRow(),7).toString();
+
+                if(!image_path.isEmpty()){
+
+                    Encrypt en = new Encrypt();
+                    en.decryptImage(image_path);
+                    
+                    JFrame imageFrame = new JFrame();
+                    imageFrame.add(new JLabel(new ImageIcon(image_path)));
+                    imageFrame.setBounds(600, 200, 800, 800);
+                    imageFrame.pack();
+                    imageFrame.setVisible(true);   
+                    en.encryptImage(image_path);                 
+                }    
+            }           
+        });
     
     }
 
@@ -138,7 +171,7 @@ public class GUI extends JFrame implements ActionListener{
         tbl_bookings.setModel(model);
         tbl_bookings.setBounds(50, 10, 750, 400);
         tbl_bookings.setAutoCreateRowSorter(true);
-
+        
         try {
             ResultSet rs_bookings = wm.ViewConsultation("A");            
             Object rowData[] = new Object[8];
@@ -200,7 +233,9 @@ public class GUI extends JFrame implements ActionListener{
         if(e.getSource()==btn_addPatient) new AddPatient();
         
         //btn_addconsultation on-click
-        if(e.getSource()==btn_addConsultation) new AddConsultaion();
+        if(e.getSource()==btn_addConsultation){
+            new AddConsultaion();
+        } 
         
         //btn_cancelConsultation on-click
         if(e.getSource()==btn_cancelConsultation) new CancelConsultation();
@@ -210,6 +245,8 @@ public class GUI extends JFrame implements ActionListener{
             this.dispose();
             System.exit(0);
         }
+
+       
     }   
     
 }

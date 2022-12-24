@@ -15,11 +15,8 @@ public class AddPatient extends JFrame implements ActionListener {
 
     public AddPatient() {
     
-        //Main Frame --------------------------------------------------
-        new JFrame();
-        
         this.setTitle("Add Patient");
-        this.setBounds(600,200,600,475);
+        this.setBounds(650,300,600,475);
         this.setLayout(null);
         this.setVisible(true);
         

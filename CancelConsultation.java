@@ -13,8 +13,6 @@ public class CancelConsultation extends JFrame implements ActionListener {
 
     public CancelConsultation(){
 
-        new JFrame();
-
         this.setTitle("Cancel Consultation");
         this.setBounds(650,400,560,200);
         this.setLayout(null);
@@ -55,11 +53,11 @@ public class CancelConsultation extends JFrame implements ActionListener {
                 //Update the DB
                 if(wm.CancelConsultation(Integer.parseInt(booking_id)))
                 {
-                    JOptionPane.showMessageDialog(null, "Booking No: " + booking_id +" removed from the system", "Cancel Consultation", 
+                    JOptionPane.showMessageDialog(null, "Booking No " + booking_id +" removed from the system", "Cancel Consultation", 
                                                   JOptionPane.INFORMATION_MESSAGE);                    
                     this.dispose(); 
                 }else{
-                    JOptionPane.showMessageDialog(null, "Booking not exists, please re-enter.", "Cancel Consultation", 
+                    JOptionPane.showMessageDialog(null, "Booking No does not exists, please re-enter.", "Cancel Consultation", 
                                                   JOptionPane.ERROR_MESSAGE);
                 }    
             }          
@@ -76,12 +74,12 @@ public class CancelConsultation extends JFrame implements ActionListener {
         String input = txt_bookingID.getText();
 
         if ( input.isEmpty()){
-            JOptionPane.showMessageDialog(null, " PLease enter the 'Booking No'",  "Cancel Consultation", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, " Please enter the Booking No",  "Cancel Consultation", JOptionPane.WARNING_MESSAGE);
             txt_bookingID.requestFocus();
             isError = false;
 
         } else if( !input.matches("[0-9.]+")) {
-            JOptionPane.showMessageDialog(null, "Booking No: should be numeric, please re-enter.",  "Cancel Consultation", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Booking No should be numeric, please re-enter.",  "Cancel Consultation", JOptionPane.WARNING_MESSAGE);
             txt_bookingID.requestFocus();
             isError = false;
         }
