@@ -118,10 +118,12 @@ public class GUI extends JFrame implements ActionListener{
                     en.EncryptDecryptImage(image_path);
                     
                     JFrame imageFrame = new JFrame();
-                    imageFrame.add(new JLabel(new ImageIcon(image_path)));
-                    imageFrame.setBounds(600, 200, 800, 800);
-                    imageFrame.pack();
-                    imageFrame.setVisible(true);   
+                    JDialog dialog = new JDialog(imageFrame, "", true);
+
+                    dialog.add(new JLabel(new ImageIcon(image_path)));
+                    dialog.setBounds(600, 200, 800, 800);
+                    dialog.pack();
+                    dialog.setVisible(true);   
                     en.EncryptDecryptImage(image_path);                
                 }    
             }           

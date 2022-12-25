@@ -32,6 +32,8 @@ public class AddConsultaion extends JFrame implements ActionListener {
         
     public AddConsultaion(){
 
+        JDialog dialog = new JDialog(this, "", true);
+
         JPanel panelleft = new JPanel();
         panelleft.setPreferredSize(new Dimension(600, 300));
         panelleft.setLayout(null);
@@ -151,17 +153,17 @@ public class AddConsultaion extends JFrame implements ActionListener {
         panelRight.add(lbl_image);
         panelRight.add(btn_upload);
         panelRight.add(lbl_imagepath);
-                
-        //Add panels to the frame
-        this.setTitle("Add Consultation");
-        this.setBounds(300,200,1200, 520);
-        this.add(panelleft, BorderLayout.WEST);
-        this.add(panelRight,BorderLayout.EAST);
-        this.setResizable(false);      
-        this.setVisible(true); 
 
         //load initial data
-        Load_Data();        
+        Load_Data();     
+                
+        //Add panels to the frame
+        dialog.setTitle("Add Consultation");
+        dialog.setBounds(300,200,1200, 520);
+        dialog.add(panelleft, BorderLayout.WEST);
+        dialog.add(panelRight,BorderLayout.EAST);
+        dialog.setResizable(false);      
+        dialog.setVisible(true);            
 
     }
 
@@ -191,7 +193,10 @@ public class AddConsultaion extends JFrame implements ActionListener {
         if(e.getSource() == btn_reset){
             cmb_patinet_name.setSelectedIndex(-1);
             cmb_datetime.setSelectedIndex(-1);
-            txt_notes.setText("");           
+            cmb_doctor.setSelectedIndex(0);
+            txt_notes.setText("");
+            txt_date.setText("");
+            GetDoctorAvailability( cmb_doctor.getSelectedItem().toString());           
         }
 
         //Cancel button on-click event - close the window

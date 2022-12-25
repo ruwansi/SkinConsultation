@@ -13,26 +13,28 @@ public class CancelConsultation extends JFrame implements ActionListener {
 
     public CancelConsultation(){
 
-        this.setTitle("Cancel Consultation");
-        this.setBounds(650,400,560,200);
-        this.setLayout(null);
-        this.setResizable(false);
-        this.setVisible(true);
+        JDialog dialog = new JDialog(this, "", true);
 
+        dialog.setTitle("Cancel Consultation");
+        dialog.setBounds(650,400,560,200);
+        dialog.setLayout(null);
+        dialog.setResizable(false);
+        
         JLabel lbl_title = new JLabel("Enter Booking No: ");
         lbl_title.setBounds(50, 50, 200, 30);
         lbl_title.setFont(new Font("Calibri", Font.PLAIN, 16));
-        this.add(lbl_title);
+        dialog.add(lbl_title);
 
         txt_bookingID = new JTextField("");
         txt_bookingID.setBounds(180, 50, 200, 30);
-        this.add(txt_bookingID);        
+        dialog.add(txt_bookingID);        
         
         btn_ok = new JButton("OK");
         btn_ok.setBounds(400, 50, 100, 30);
         btn_ok.addActionListener(this);
-        this.add(btn_ok);
-
+        dialog.add(btn_ok);
+        
+        dialog.setVisible(true);
     }
 
 
