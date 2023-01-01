@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.util.Collections;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -145,6 +146,7 @@ public class GUI extends JFrame implements ActionListener{
         tbl_doctor.setAutoCreateRowSorter(true);
 
         Object rowData[] = new Object[5];
+        Collections.sort(wm.doctors);
 
         for (int i = 0; i < wm.doctors.size(); i++) {
             rowData[0] = wm.doctors.get(i).getName() + " " + wm.doctors.get(i).getSurname();

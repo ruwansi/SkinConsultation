@@ -11,5 +11,6 @@ javac GUI.java
 javac AddConsultaion.java
 javac AddPatient.java
 javac CancelConsultation.java
+javac LoadingPage.java
 
 java Console

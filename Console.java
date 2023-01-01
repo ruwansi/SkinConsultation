@@ -56,7 +56,7 @@ public class Console {
                     break;
                
                 case 5:
-                    new GUI();
+                    new LoadingPage();
                     break;    
                 
                 case 6:
